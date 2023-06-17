@@ -3,7 +3,7 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 setuptools.setup(
     name="bio2csv",
-    version="0.0.2",
+    version="0.0.3",
     author="Andrew Gao",
     author_email="gaodrew@stanford.edu",
     description="the easiest way to scrape preprints from biorxiv",

@@ -3,6 +3,10 @@
 `bio2csv` is a Python package that allows you to easily scrape all research papers that match a search query (such as [penguins](https://www.biorxiv.org/search/penguin)) on BioRxiv. It retrieves metadata (title, authors, link to each paper), and it can also fetch the abstract and the full text if specified.
 You can also scrape all research papers that fall under a specific Biorxiv subject area, such as Genetics or Paleontology. To encourage responsible use of biorxiv, short random delays are implemented into the code to prevent overload/spam.
 
+<a target="_blank" href="https://colab.research.google.com/github/andrewgcodes/bio2csv/blob/main/bio2csv.ipynb">
+  <img src="https://colab.research.google.com/assets/colab-badge.png" alt="Open In Colab"/>
+</a>
+
 ##  Easy Installation
 
 You can install the `bio2csv` [package](https://pypi.org/project/bio2csv/) with pip:
