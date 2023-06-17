@@ -1,0 +1,152 @@
+Metadata-Version: 2.1
+Name: bio2csv
+Version: 0.0.2
+Summary: the easiest way to scrape preprints from biorxiv
+Home-page: https://github.com/andrewgcodes
+Author: Andrew Gao
+Author-email: gaodrew@stanford.edu
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown
+License-File: LICENSE
+
+# bio2csv 🐧
+
+`bio2csv` is a Python package that allows you to easily scrape all research papers that match a search query (such as [penguins](https://www.biorxiv.org/search/penguin)) on BioRxiv. It retrieves metadata (title, authors, link to each paper), and it can also fetch the abstract and the full text if specified.
+You can also scrape all research papers that fall under a specific Biorxiv subject area, such as Genetics or Paleontology. To encourage responsible use of biorxiv, short random delays are implemented into the code to prevent overload/spam.
+
+##  Easy Installation
+
+You can install the `bio2csv` [package](https://pypi.org/project/bio2csv/) with pip:
+
+```bash
+pip install bio2csv
+```
+You probably already have most of these dependencies:
+- **from bs4 import BeautifulSoup** (This is less common. Run pip install beautifulsoup4)
+- from tqdm import tqdm
+- import requests
+- import re
+- import time
+- import pandas as pd
+- import random
+
+## Usage
+There are two functions available: scrape_biorxiv() and fetch_paper_details().
+scrape_biorxiv() repeatedly calls fetch_paper_details().
+
+### scrape_biorxiv
+
+#### Parameters:
+
+- `base_url` (str): **READ THIS FULLY** The base URL to scrape the papers from. Default is "https://www.biorxiv.org/collection/genetics?page=". You can choose from any of the subject areas here: https://www.biorxiv.org/. Or choose a search result URL such as https://www.biorxiv.org/search/penguins. **You MUST APPEND ?page= to the end of the URL!**
+- `pages` (int, optional): The number of pages to scrape. Default is 5.
+
+- `get_abstract` (bool, optional): Whether to fetch the abstract of each paper. Default is `True`. If you don't want to fetch the abstracts, set this to `False`.
+
+- `get_full_text` (bool, optional): Whether to fetch the full text of each paper. Default is `True`. If you don't want to fetch the full texts, set this to `False`. Images will not be fetched.
+
+#### Returns:
+
+- `pandas.DataFrame`: A DataFrame containing the details of the scraped papers.
+  
+
+### fetch_paper_details
+
+Function `fetch_paper_details` fetches the abstract and the full text of a single paper.
+
+#### Parameters:
+
+- `paper_url` (str): The URL of the paper to fetch the details from.
+
+- `session` (requests.Session): An active `requests.Session()` to fetch the details.
+
+#### Returns:
+
+- `tuple`: A tuple containing the abstract and the full text of the paper.
+
+Note: If the function encounters any error while fetching the details, it will return "Not found" for the abstract and/or the full text.
+
+## Quickstart
+
+Parameters
+
+Here's a simple usage example 🐧:
+
+```python
+!pip install bio2csv
+
+from bio2csv import scrape_biorxiv
+
+# 🐧Scrape the first 2 pages of the search results for "penguin" and get the abstract and full texts. 🐧
+df = scrape_biorxiv(pages=2, base_url = 'https://www.biorxiv.org/search/penguin?page=', get_abstract=True, get_full_text=True)
+
+# Print the resulting DataFrame
+print(df)
+
+# Save to CSV
+df.to_csv("PenguinPapers.csv")
+```
+### Fetching text for a single paper
+You can also use the `fetch_paper_details` function to fetch the abstract and full text of a **single** paper:
+
+```python
+from bio2csv import fetch_paper_details
+import requests
+
+# Initialize a session
+session = requests.Session()
+
+# URL of a paper about penguin conservation 🐧
+paper_url = "https://www.biorxiv.org/content/10.1101/2021.04.06.438390v1"
+
+# Fetch details
+abstract, full_text = fetch_paper_details(paper_url, session)
+
+# Print details
+print(f"Abstract: {abstract}")
+print(f"Full Text: {full_text}")
+```
+
+Please note that the `fetch_paper_details` function needs an active `requests.Session()` to work.
+
+### Only Scraping Abstracts
+
+```python
+from bio_scraper import scrape_biorxiv
+
+# Scrape only the abstracts from the first 5 pages of the Genetics collection (remember, the default base_url is for the Genetics collection)
+df_abstracts = scrape_biorxiv(pages=5, get_abstract=True, get_full_text=False)
+
+print(df_abstracts)
+```
+
+### Only Scraping Full Text
+
+```python
+from bio_scraper import scrape_biorxiv
+
+# Scrape only the full text from the first 5 pages of the genetics collection
+df_full_texts = scrape_biorxiv(pages=5, get_abstract=False, get_full_text=True)
+
+print(df_full_texts)
+```
+
+Remember, it's important to use web scraping responsibly and respect terms of service!
+This code sends about one request every 10 seconds so it will not overload the biorxiv servers.
+I intentionally did not implement multithreading in order to prevent abuse of biorxiv.
+Also, you don't want to get IP banned.
+
+## Contributing
+
+Contributions to `bio2csv` are welcome! If you have a feature request, bug report, or proposal, please open an issue on this repository. If you wish to contribute code, please fork the repository, make your changes, and submit a pull request.
+The penguin examples were inspired by my CS161 class at Stanford which features Plucky the Pedantic Penguin. 
+If you find this repository useful, consider donating to the [Global Penguin Society](https://www.globalpenguinsociety.org/)
+🐧🐧🐧
+
+## License
+
+`bio2csv` is released under the MIT License. For more details, see the `LICENSE` file in this repository.
+You are responsible for how you use this package. I am not liable for any losses, harms, damages, or other consequences incurred by this package.

@@ -1,0 +1,9 @@
+LICENSE
+README.md
+pyproject.toml
+setup.py
+bio2csv/__init__.py
+bio2csv.egg-info/PKG-INFO
+bio2csv.egg-info/SOURCES.txt
+bio2csv.egg-info/dependency_links.txt
+bio2csv.egg-info/top_level.txt
